@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="tab_bar_title_fug">Fugitivo</string>
+	<string name="tab_bar_title_cap">Capturado</string>
+	<string name="fugitive_status_at_large">Não capturado</string>
+	<string name="fugitive_status_cap">Capturado</string>
+
+	<string name="add_window_title">Novo Procurado</string>
+	
+	<string name="button_cap">Capturar</string>
+	<string name="button_del">Deletar</string>
+</resources>
