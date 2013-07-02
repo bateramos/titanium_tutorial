@@ -1,5 +1,5 @@
 function Database() {
-}
+};
 
 Database.prototype.getConnection = function() {
 	this.myDatabase = Ti.Database.open('bountyDB');
@@ -11,10 +11,10 @@ Database.prototype.getConnection = function() {
 	myDatabase.execute(createFugitive);
 	
 	return myDatabase;
-}
+};
 
 Database.prototype.close = function(argument) {
 	this.myDatabase.close();
-}
+};
 
 module.exports = Database;

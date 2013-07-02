@@ -2,13 +2,13 @@ var Database = require("api/Database");
 
 function FugitiveDAO() {
 	this.database = new Database();
-}
+};
 
 FugitiveDAO.prototype.list = function(isBusted) {
 	var connection = this.database.getConnection();
 	
 	connection.execute();
-}
+};
 
 FugitiveDAO.prototype.add = function(fugitive) {
 	var connection = this.database.getConnection();
@@ -20,7 +20,7 @@ FugitiveDAO.prototype.add = function(fugitive) {
 	} finally {
 		this.database.close();
 	}
-}
+};
 
 FugitiveDAO.prototype.remove = function(fugitive) {
 	var connection = this.database.getConnection();
@@ -32,7 +32,7 @@ FugitiveDAO.prototype.remove = function(fugitive) {
 	} finally {
 		this.database.close();
 	}
-}
+};
 
 FugitiveDAO.prototype.bust = function(fugitive) {
 	var connection = this.database.getConnection();
@@ -44,6 +44,6 @@ FugitiveDAO.prototype.bust = function(fugitive) {
 	} finally {
 		this.database.close();
 	}
-}
+};
 
 module.exports = FugitiveDAO;

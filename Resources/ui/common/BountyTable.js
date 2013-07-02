@@ -8,7 +8,7 @@ function BountyTable(isFugitiveTable) {
   		className: "forumEvent",
   		height: 50,
   		rowIndex:index
-  	})
+  	});
   	
   	var textField = Ti.UI.createLabel({
   		left:10,

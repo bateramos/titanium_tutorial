@@ -23,7 +23,7 @@ NavigationController.prototype.root = function(rootWindow) {
 	rootWindow.navigationController = this;
 	
 	return rootWindow;
-}
+};
 
 NavigationController.prototype.open = function(windowToOpen) {
 	this.windowStack.push(windowToOpen);
