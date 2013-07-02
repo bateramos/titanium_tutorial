@@ -1,6 +1,6 @@
 describe("Teste teste", function() {
 	it("Fail", function () {
-		expect(false).ToEqual(false);
+		expect(true);
 	})
 	
 	it("Success", function () {
