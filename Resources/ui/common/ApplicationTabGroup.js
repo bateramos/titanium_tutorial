@@ -5,10 +5,10 @@ function ApplicationTabGroup() {
 	var self = Titanium.UI.createTabGroup(); 
 
 	var fugitiveNavigationController = new NavigationController();
-  	var windowFugitives = new Window(true);
+  	var windowFugitives = new Window(false);
 	var rootView = fugitiveNavigationController.root(windowFugitives);
 		  	
-  	var windowCaptured = new Window(false);
+  	var windowCaptured = new Window(true);
 	  	
   	var tabFugitives = Titanium.UI.createTab({
   		title: L("tab_bar_title_fug"),

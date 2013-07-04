@@ -1,9 +1,9 @@
-#appname: TiBountyHunter
-#appid: br.com.byter.bountyhunter
-#type: mobile
-#guid: 94f32bdd-01b2-44eb-9b6b-5a9a412b5d54
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:TiBountyHunter
+#appid:br.com.byter.tutorial.bountyhunter
+#type:mobile
+#guid:94f32bdd-01b2-44eb-9b6b-5a9a412b5d54
+#version:1.0
+#publisher:bateramos
+#url:http://
+#image:appicon.png
+#desc:not specified

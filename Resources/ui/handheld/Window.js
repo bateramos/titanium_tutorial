@@ -2,8 +2,8 @@ var BountyTable = require("ui/common/BountyTable");
 var DetailWindow = require("ui/common/DetailWindow");
 var AddWindow = require("ui/common/AddWindow");
 
-function Window(isFugitiveWindow){
-	var title = isFugitiveWindow ? L("tab_bar_title_fug") : L("tab_bar_title_cap");
+function Window(isBustedWindow){
+	var title = !isBustedWindow ? L("tab_bar_title_fug") : L("tab_bar_title_cap");
 
     var self = Titanium.UI.createWindow({
 		title: title,
@@ -13,40 +13,43 @@ function Window(isFugitiveWindow){
 	
 	self.navigationController = new NavigationController();
 	
-	if (isFugitiveWindow) {
-		var table = new BountyTable(isFugitiveWindow);
-		
-		table.addEventListener("click", function() {
-	  		var fugitive = {name: "Fulano", stillAtLarge: true};
-	  		
-			self.navigationController.open(new DetailWindow(fugitive));
-		});
-		
-		self.add(table);
-		
-		if (bountyHunter.isIOS) {
-			var addButton = Ti.UI.createButton({
-				title:"Add"
-			});
-			
-			addButton.addEventListener("click", function() {
-				self.navigationController.open(new AddWindow());
-			});
-			
-			self.rightNavButton = addButton;
-		} else if (bountyHunter.isAndroid) {
-			self.activity.onCreateOptionsMenu = function(event) {
-				var menu = event.menu;
-				var menuItem = menu.add({ 
-					title: "Add", 
-				    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
-				});
-				menuItem.addEventListener("click", function(e) {
-					self.navigationController.open(new AddWindow());
-				});
-			}
-		}
-	}
+	var table = new BountyTable(isBustedWindow);
+	
+    if (!isBustedWindow) {
+        table.tableView.addEventListener("click", function(clickedTableView) {
+            var fugitive = clickedTableView.rowData.data;
+            self.navigationController.open(new DetailWindow(fugitive));
+        });
+        
+        if (bountyHunter.isIOS) {
+            var addButton = Ti.UI.createButton({
+                title:"Add"
+            });
+                
+            addButton.addEventListener("click", function() {
+                self.navigationController.open(new AddWindow());
+            });
+                
+            self.rightNavButton = addButton;
+        } else if (bountyHunter.isAndroid) {
+            self.activity.onCreateOptionsMenu = function(event) {
+                var menu = event.menu;
+                var menuItem = menu.add({ 
+                    title: "Add", 
+                    showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
+                });
+                menuItem.addEventListener("click", function(e) {
+                    self.navigationController.open(new AddWindow());
+                });
+            }
+        }
+    }
+        
+    self.add(table.tableView);
+    
+    Titanium.App.addEventListener("app:refreshFugitiveList", function () {
+        table.loadData();
+    });
 	
 	return self;
 }

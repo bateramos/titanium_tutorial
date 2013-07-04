@@ -67,11 +67,11 @@ NavigationController.prototype.home = function() {
 	this.windowStack = [this.windowStack[0]];
 };
 
-NavigationController.prototype.back = function(w) {
+NavigationController.prototype.back = function(window) {
 	if(this.isAndroid) {
-		w.close();
+		window.close();
 	} else if (this.isIOS) {
-		this.navGroup.close(w);
+		this.navGroup.close(window);
 	}
 };
 

@@ -5,12 +5,12 @@ Database.prototype.getConnection = function() {
 	this.myDatabase = Ti.Database.open('bountyDB');
 	
 	var createFugitive = 'CREATE TABLE IF NOT EXISTS FUGITIVE(' +
-    	'id INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, CAPTURED INT' +
+    	'ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, ISBUSTED INT' +
 	')';
 	
-	myDatabase.execute(createFugitive);
+	this.myDatabase.execute(createFugitive);
 	
-	return myDatabase;
+	return this.myDatabase;
 };
 
 Database.prototype.close = function(argument) {

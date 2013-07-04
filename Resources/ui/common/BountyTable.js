@@ -1,33 +1,45 @@
-function BountyTable(isFugitiveTable) {
+var FugitiveDAO = require("api/FugitiveDAO");
+
+function BountyTable(isBustedTable) {
+    this.isBustedTable = isBustedTable;
+    this.tableView = Ti.UI.createTableView({
+        backgroundColor: 'transparent'
+    });
   
-  var rows = [];
-  var data = [{title: "Teste"}, {title: "Teste 2"}];
+    this.loadData();
   
-  for (var index = 0; index < data.length; index++) {
-  	var row = Ti.UI.createTableViewRow({
-  		className: "forumEvent",
-  		height: 50,
-  		rowIndex:index
-  	});
-  	
-  	var textField = Ti.UI.createLabel({
-  		left:10,
-  		color: "white",
-  		text:data[index].title
-  	});
-  	
-  	row.add(textField);
-  	row.hasChild = true;
-  	
-  	rows.push(row);
-  }
-  
-  var self = Ti.UI.createTableView({
-  	backgroundColor: 'transparent',
-  	data: rows
-  });
-  
-  return self;
+    return this;
+}
+
+BountyTable.prototype = {
+    loadData: function () {
+        this.tableView.setData([]);
+        
+        var rows = new Array();
+        var data = new FugitiveDAO().list(this.isBustedTable);
+          
+        for (var index = 0; index < data.length; index++) {
+            var row = Ti.UI.createTableViewRow({
+                className: "forumEvent",
+                height: 50,
+                rowIndex:index,
+                data: data[index]
+            });
+            
+            var textField = Ti.UI.createLabel({
+                left:10,
+                color: "white",
+                text:data[index].name
+            });
+            
+            row.add(textField);
+            row.hasChild = true;
+            
+            rows.push(row);
+        }
+      
+        this.tableView.setData(rows);
+    }
 }
 
 
