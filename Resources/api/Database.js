@@ -13,7 +13,7 @@ Database.prototype.getConnection = function() {
 	return this.myDatabase;
 };
 
-Database.prototype.close = function(argument) {
+Database.prototype.close = function() {
 	this.myDatabase.close();
 };
 

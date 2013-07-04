@@ -15,7 +15,7 @@ BountyTable.prototype = {
     loadData: function () {
         this.tableView.setData([]);
         
-        var rows = new Array();
+        var rows = [];
         var data = new FugitiveDAO().list(this.isBustedTable);
           
         for (var index = 0; index < data.length; index++) {
@@ -40,7 +40,7 @@ BountyTable.prototype = {
       
         this.tableView.setData(rows);
     }
-}
+};
 
 
 module.exports = BountyTable; 

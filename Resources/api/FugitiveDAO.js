@@ -11,7 +11,7 @@ FugitiveDAO.prototype.list = function(isBusted) {
 	var connection = this.database.getConnection();
 	
 	var sql = 'SELECT ID, NAME FROM FUGITIVE WHERE ISBUSTED = ?';
-	var fugitives = new Array();
+	var fugitives = [];
 	
 	var rows = null;
 	

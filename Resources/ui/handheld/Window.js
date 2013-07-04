@@ -38,10 +38,10 @@ function Window(isBustedWindow){
                     title: "Add", 
                     showAsAction: Ti.Android.SHOW_AS_ACTION_IF_ROOM
                 });
-                menuItem.addEventListener("click", function(e) {
+                menuItem.addEventListener("click", function() {
                     self.navigationController.open(new AddWindow());
                 });
-            }
+            };
         }
     }
         
