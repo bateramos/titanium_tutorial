@@ -2,6 +2,7 @@ var Database = require("api/Database");
 var Fugitive = require("entity/Fugitive");
 
 var TRUE_VALUE = 1;
+var FALSE_VALUE = 0;
 
 function FugitiveDAO() {
 	this.database = new Database();
@@ -16,7 +17,6 @@ FugitiveDAO.prototype.list = function(isBusted) {
 	var rows = null;
 	
 	try {
-	    Ti.API.info(isBusted ? 1 : 0);
 	    rows = connection.execute(sql, isBusted ? 1 : 0);
 	    
 	    while(rows.isValidRow()) {
@@ -48,6 +48,20 @@ FugitiveDAO.prototype.add = function(fugitive) {
 	} finally {
 		this.database.close();
 	}
+};
+
+FugitiveDAO.prototype.addAll = function(fugitives) {
+    var connection = this.database.getConnection();
+    
+    var sql = 'INSERT INTO FUGITIVE (NAME, ISBUSTED) VALUES (?,?)';
+    
+    try {
+        for (var index = 0; index < fugitives.length; index++) {
+            connection.execute(sql, fugitives[index].name, FALSE_VALUE);
+        }
+    } finally {
+        this.database.close();
+    }
 };
 
 FugitiveDAO.prototype.remove = function(fugitive) {

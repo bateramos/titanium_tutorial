@@ -1,4 +1,5 @@
 var FugitiveDAO = require("api/FugitiveDAO");
+var FugitiveWebservice = require("api/FugitiveWebservice");
 
 function DetailWindow(fugitive) {
 	
@@ -27,6 +28,18 @@ function DetailWindow(fugitive) {
 		captureButton.addEventListener("click", function () {
              fugitiveDAO.bust(fugitive);
              Titanium.App.fireEvent("app:refreshFugitiveList");
+             
+             var macAddress = Titanium.Platform.macaddress;
+             var fugitiveWebservice = new FugitiveWebservice();
+             
+             var onComplete = function(event) {
+                 var returnMessage = JSON.parse(event.source.responseText); 
+                 
+                 alert(returnMessage.message);  
+             };
+             
+             fugitiveWebservice.bustFugitive(macAddress, onComplete);
+             
              self.navigationController.back(self);
 		});
 		

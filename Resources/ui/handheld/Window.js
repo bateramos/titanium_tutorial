@@ -2,6 +2,9 @@ var BountyTable = require("ui/common/BountyTable");
 var DetailWindow = require("ui/common/DetailWindow");
 var AddWindow = require("ui/common/AddWindow");
 
+var FugitiveWebservice = require("api/FugitiveWebservice");
+var FugitiveDAO = require("api/FugitiveDAO");
+
 function Window(isBustedWindow){
 	var title = !isBustedWindow ? L("tab_bar_title_fug") : L("tab_bar_title_cap");
 
@@ -43,15 +46,64 @@ function Window(isBustedWindow){
                 });
             };
         }
-    }
         
-    self.add(table.tableView);
+        loadFugitive(self);
+    }
     
     Titanium.App.addEventListener("app:refreshFugitiveList", function () {
         table.loadData();
     });
-	
+    
+    self.add(table.tableView);
+    
 	return self;
+}
+
+var disableComponents = function(window) {
+    var childViews = window.children;
+    
+    for (var index = 0; index < childViews.length; index++) {
+        childViews[index].setTouchEnabled(false);
+    }
+}
+
+var enabledComponents = function(window) {
+    var childViews = window.children;
+    
+    for (var index = 0; index < childViews.length; index++) {
+        childViews[index].setTouchEnabled(true);
+    }
+}
+
+var loadFugitive = function(window) {
+    var dataLoaded = Titanium.App.Properties.getBool("dataLoaded", false);
+    
+    if (dataLoaded) {
+        return;
+    }
+    
+    disableComponents(window);
+    
+    var webservice = new FugitiveWebservice();
+    
+    var onComplete = function(event) {
+        var fugitives = JSON.parse(event.source.responseText);
+        
+        var fugitiveDAO = new FugitiveDAO();
+        fugitiveDAO.addAll(fugitives);
+        
+        Titanium.App.Properties.setBool("dataLoaded", true);
+        enabledComponents(window);
+        
+        Titanium.App.fireEvent("app:refreshFugitiveList");
+    };
+    
+    var onFail = function() {
+        enabledComponents(window);
+        alert("Erro");
+    };
+    
+    webservice.getFugitives(onComplete, onFail);
 }
 
 module.exports = Window;

@@ -24,7 +24,7 @@ function ApplicationTabGroup() {
 	
   	self.addTab(tabFugitives);
   	self.addTab(tabCaptured);
-	  		  	
+	
 	return self;
 }
 
