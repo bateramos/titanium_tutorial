@@ -9,6 +9,7 @@
 	
 	<string name="add_fugitive_label">Nome do fugitivo</string>
 	
+	<string name="button_photo">Adicionar Foto</string>
 	<string name="button_cap">Capturar</string>
 	<string name="button_del">Deletar</string>
 </resources>

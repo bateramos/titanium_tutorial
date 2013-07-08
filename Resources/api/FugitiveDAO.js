@@ -1,29 +1,29 @@
-var Database = require("api/Database");
 var Fugitive = require("entity/Fugitive");
+
+var DatabaseInstrument = require("instrument/DatabaseInstrument");
 
 var TRUE_VALUE = 1;
 var FALSE_VALUE = 0;
 
 function FugitiveDAO() {
-	this.database = new Database();
+	DatabaseInstrument.instrumentDatabaseOpen(this, ["list", "add", "addAll", "remove", "updatePhoto", "bust"]);
 };
 
 FugitiveDAO.prototype.list = function(isBusted) {
-	var connection = this.database.getConnection();
-	
-	var sql = 'SELECT ID, NAME FROM FUGITIVE WHERE ISBUSTED = ?';
+	var sql = 'SELECT ID, NAME, PHOTOURL FROM FUGITIVE WHERE ISBUSTED = ?';
 	var fugitives = [];
 	
 	var rows = null;
 	
 	try {
-	    rows = connection.execute(sql, isBusted ? 1 : 0);
+	    rows = this.connection.execute(sql, isBusted ? 1 : 0);
 	    
 	    while(rows.isValidRow()) {
 	        var id = rows.fieldByName("ID");
 	        var name = rows.fieldByName("NAME");
+	        var photoURL = rows.fieldByName("PHOTOURL");
 	        
-	        var fugitive = new Fugitive(id, name, isBusted);
+	        var fugitive = new Fugitive(id, name, isBusted, photoURL);
 	        fugitives.push(fugitive);
 	        rows.next();
 	    }
@@ -31,61 +31,41 @@ FugitiveDAO.prototype.list = function(isBusted) {
 	    if (rows) {
 	        rows.close();
 	    }
-	    
-	    connection.close();
 	}
 	
     return fugitives;
 };
 
 FugitiveDAO.prototype.add = function(fugitive) {
-	var connection = this.database.getConnection();
-	
 	var sql = 'INSERT INTO FUGITIVE (NAME, ISBUSTED) VALUES (?,?)';
 	
-	try {
-		connection.execute(sql, fugitive.name, fugitive.isBusted ? 1 : 0);
-	} finally {
-		this.database.close();
-	}
+	this.connection.execute(sql, fugitive.name, fugitive.isBusted ? 1 : 0);
 };
 
 FugitiveDAO.prototype.addAll = function(fugitives) {
-    var connection = this.database.getConnection();
-    
     var sql = 'INSERT INTO FUGITIVE (NAME, ISBUSTED) VALUES (?,?)';
     
-    try {
-        for (var index = 0; index < fugitives.length; index++) {
-            connection.execute(sql, fugitives[index].name, FALSE_VALUE);
-        }
-    } finally {
-        this.database.close();
+    for (var index = 0; index < fugitives.length; index++) {
+        this.connection.execute(sql, fugitives[index].name, FALSE_VALUE);
     }
 };
 
 FugitiveDAO.prototype.remove = function(fugitive) {
-	var connection = this.database.getConnection();
-	
 	var sql = 'DELETE FROM FUGITIVE WHERE ID = ?';
 	
-	try {
-		connection.execute(sql, fugitive.id);
-	} finally {
-		this.database.close();
-	}
+	this.connection.execute(sql, fugitive.id);
+};
+
+FugitiveDAO.prototype.updatePhoto = function(fugitive) {
+    var sql = "UPDATE FUGITIVE SET PHOTOURL = ? WHERE ID = ?";
+    
+    this.connection.execute(sql, fugitive.photoUrl, fugitive.id);
 };
 
 FugitiveDAO.prototype.bust = function(fugitive) {
-	var connection = this.database.getConnection();
-	
 	var sql = 'UPDATE FUGITIVE SET isBusted = ? WHERE ID = ?';
 	
-	try {
-		connection.execute(sql, TRUE_VALUE, fugitive.id);
-	} finally {
-		this.database.close();
-	}
+	this.connection.execute(sql, TRUE_VALUE, fugitive.id);
 };
 
 module.exports = FugitiveDAO;

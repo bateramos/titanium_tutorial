@@ -27,10 +27,10 @@ FugitiveWebservice.prototype = {
         
         var param = {
             udid: macAddress
-        }
+        };
         
         httpClient.send(param);
     }
-}
+};
 
 module.exports = FugitiveWebservice;

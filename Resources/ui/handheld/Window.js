@@ -47,7 +47,7 @@ function Window(isBustedWindow){
             };
         }
         
-        loadFugitive(self);
+        this.loadFugitive(self);
     }
     
     Titanium.App.addEventListener("app:refreshFugitiveList", function () {
@@ -57,53 +57,55 @@ function Window(isBustedWindow){
     self.add(table.tableView);
     
 	return self;
-}
+};
 
-var disableComponents = function(window) {
-    var childViews = window.children;
-    
-    for (var index = 0; index < childViews.length; index++) {
-        childViews[index].setTouchEnabled(false);
-    }
-}
-
-var enabledComponents = function(window) {
-    var childViews = window.children;
-    
-    for (var index = 0; index < childViews.length; index++) {
-        childViews[index].setTouchEnabled(true);
-    }
-}
-
-var loadFugitive = function(window) {
-    var dataLoaded = Titanium.App.Properties.getBool("dataLoaded", false);
-    
-    if (dataLoaded) {
-        return;
-    }
-    
-    disableComponents(window);
-    
-    var webservice = new FugitiveWebservice();
-    
-    var onComplete = function(event) {
-        var fugitives = JSON.parse(event.source.responseText);
+Window.prototype = {
+    disableComponents: function(window) {
+        var childViews = window.children;
         
-        var fugitiveDAO = new FugitiveDAO();
-        fugitiveDAO.addAll(fugitives);
+        for (var index = 0; index < childViews.length; index++) {
+            childViews[index].setTouchEnabled(false);
+        }
+    },
+    enabledComponents: function(window) {
+        var childViews = window.children;
         
-        Titanium.App.Properties.setBool("dataLoaded", true);
-        enabledComponents(window);
+        for (var index = 0; index < childViews.length; index++) {
+            childViews[index].setTouchEnabled(true);
+        }
+    },
+    loadFugitive: function(window) {
+        var dataLoaded = Titanium.App.Properties.getBool("dataLoaded", false);
         
-        Titanium.App.fireEvent("app:refreshFugitiveList");
-    };
-    
-    var onFail = function() {
-        enabledComponents(window);
-        alert("Erro");
-    };
-    
-    webservice.getFugitives(onComplete, onFail);
-}
+        if (dataLoaded) {
+            return;
+        }
+        
+        this.disableComponents(window);
+        
+        var webservice = new FugitiveWebservice();
+        
+        var enableComponentsFunction = this.enabledComponents;
+        
+        var onComplete = function(event) {
+            var fugitives = JSON.parse(event.source.responseText);
+            
+            var fugitiveDAO = new FugitiveDAO();
+            fugitiveDAO.addAll(fugitives);
+            
+            Titanium.App.Properties.setBool("dataLoaded", true);
+            enableComponentsFunction(window);
+            
+            Titanium.App.fireEvent("app:refreshFugitiveList");
+        };
+        
+        var onFail = function() {
+            enableComponentsFunction(window);
+            alert("Erro");
+        };
+        
+        webservice.getFugitives(onComplete, onFail);
+    }
+};
 
 module.exports = Window;

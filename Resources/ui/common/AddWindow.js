@@ -27,7 +27,8 @@ function AddWindow() {
         
         if (hasNewFugitive) {
             var fugitive = new Fugitive(null, fugitiveName, false);
-            new FugitiveDAO().add(fugitive);
+            var fugitiveDAO = new FugitiveDAO();
+            fugitiveDAO.add(fugitive);
             Titanium.App.fireEvent("app:refreshFugitiveList");
         }
     });
