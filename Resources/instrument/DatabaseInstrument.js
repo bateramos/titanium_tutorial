@@ -14,7 +14,7 @@ exports.instrumentDatabaseOpen = function (instance, methods) {
         } finally {
             instance.connection.close();
         }
-    }
+    };
     
     for (var i = 0; i < methods.length; i++) {
         meld.around(instance, methods[i], aroundMethod);

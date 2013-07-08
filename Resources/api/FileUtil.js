@@ -17,6 +17,6 @@ FileUtil.prototype = {
         
         return destinyFile.getNativePath();
     }
-}
+};
 
 module.exports = FileUtil;
